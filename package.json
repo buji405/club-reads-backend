@@ -1,0 +1,29 @@
+{
+  "name": "club-reads",
+  "version": "1.0.0",
+  "description": "book club",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "chai": "^4.1.2",
+    "express": "^4.15.4",
+    "knex": "^0.13.0",
+    "mocha": "^3.5.0",
+    "pg": "^7.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buji405/club-reads-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buji405/club-reads-backend/issues"
+  },
+  "homepage": "https://github.com/buji405/club-reads-backend#readme"
+}
