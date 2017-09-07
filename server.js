@@ -5,7 +5,7 @@ const app = express();
 const port = (process.env.PORT || 3000);
 
 const environment = process.env.NODE_ENV || 'development'
-const configuration = require('../knexfile')[environment]
+const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
 
 app.use(bodyParser.json());
@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Get the clubs so a new user can select which club to join
 app.get('/api/v1/club', (request, response) => {
-  database('club').select()
-    .then((club) => {
-      response.status(200).json(club);
+  database('clubs').select()
+    .then((clubs) => {
+      response.status(200).json(clubs);
     })
     .catch((error) => {
       response.status(500).json({ error });
@@ -37,9 +37,9 @@ app.post('/api/v1/user', (request, response) => {
 
 // View all club books
 app.get('/api/v1/book', (request, response) => {
-  database('book').select()
-    .then((book) => {
-      response.status(200).json(book);
+  database('books').select()
+    .then((books) => {
+      response.status(200).json(books);
     })
     .catch((error) => {
       response.status(500).json({ error });
@@ -61,26 +61,6 @@ app.delete('/api/v1/vote', (request, response) => {
 
 });
 
-// Get all comments
-app.get('/api/v1/comment', (request, response) => {
-  database('comment').select()
-    .then((comment) => {
-      response.status(200).json(comment);
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
-    });
-});
-
-// Edit comment
-app.patch('/api/v1/comment', (request, response) => {
-
-});
-
-// Post a comment
-app.post('/api/v1/comment', (request, response) => {
-
-});
 
 app.listen(port, () => {
   console.log(`App is listening on http://localhost:${port}`);
