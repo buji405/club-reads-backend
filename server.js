@@ -26,13 +26,9 @@ app.get('/api/v1/club', (request, response) => {
 });
 
 // Sign up a new user
-app.post('/api/v1/user', (request, response) => {
-
-});
-
 // Login a user
 app.post('/api/v1/user', (request, response) => {
-
+  // Dave
 });
 
 // View all club books
@@ -46,19 +42,24 @@ app.get('/api/v1/book', (request, response) => {
     });
 });
 
+// Add a new club
+app.post('/api/v1/club', (request, response) => {
+  // Lindsay
+});
+
 // Add a new book to club books
 app.post('/api/v1/book', (request, response) => {
-
+  // Travis
 });
 
 // Add a vote
 app.post('/api/v1/vote', (request, response) => {
-
+  // Lindsay
 });
 
 // Delete a vote
 app.delete('/api/v1/vote', (request, response) => {
-
+  // Travi
 });
 
 
