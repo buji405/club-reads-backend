@@ -90,7 +90,23 @@ app.post('/api/v1/club', (request, response) => {
 
 // Add a new book to club books
 app.post('/api/v1/book', (request, response) => {
-  // Travis
+  const newBook = request.body;
+
+  for (const requiredParamater of ['title', 'author', 'ISBN', 'description', 'image', 'upvotes', 'downvotes', 'status', 'user_id']) {
+    if (!newBook[requiredParamater]) {
+      return response.status(422).json({
+        error: `Missing required ${requiredParamater} parameter`,
+      });
+    }
+  }
+
+  database('book').insert(newBook, '*')
+    .then((book) => {
+      response.status(201).json(book[0]);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 // Add a vote
