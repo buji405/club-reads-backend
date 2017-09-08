@@ -164,11 +164,12 @@ app.delete('/api/v1/vote/:id', (request, response) => {
 app.patch('/api/v1/vote/:id', (request, response) => {
   const newVote = request.body;
   
-  for (const requiredParamater of ['direction']) {
-    if (!newVote[requiredParamater]) {
-      return response.status(422).json({
-        error: `Missing required ${requiredParamater} parameter`,
-      });
+  const requiredParamaters = ['direction'];
+
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!newVote[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
     }
   }
 
