@@ -46,7 +46,7 @@ app.post('/api/v1/user/:action', (request, response) => {
   } else if (action === 'signup') {
     database('user').insert(newUser, '*')
       .then((user) => {
-        response.status(201).json({ user, message: 'new user created!' });
+        response.status(201).json({ user: user[0], message: 'new user created!' });
       })
       .catch((error) => {
         response.status(500).json({ error: error.detail });
@@ -70,18 +70,17 @@ app.get('/api/v1/book', (request, response) => {
 // Add a new club
 app.post('/api/v1/club', (request, response) => {
   const newClub = request.body;
+  const requiredParamaters = ['name'];
 
-  for (const requiredParamater of ['name']) {
-    if (!newClub[requiredParamater]) {
-      return response.status(422).json({
-        error: `Missing required ${requiredParamater} parameter`,
-      });
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!newClub[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
     }
   }
 
   database('club').insert(newClub, '*')
     .then((club) => {
-      console.log(club);
       response.status(201).json(club[0]);
     })
     .catch((error) => {
@@ -124,12 +123,12 @@ app.post('/api/v1/book', (request, response) => {
 // Add a vote
 app.post('/api/v1/vote', (request, response) => {
   const newVote = request.body;
+  const requiredParamaters = ['direction', 'user_id', 'book_id'];
 
-  for (const requiredParamater of ['direction', 'user_id', 'book_id']) {
-    if (!newVote[requiredParamater]) {
-      return response.status(422).json({
-        error: `Missing required ${requiredParamater} parameter`
-      });
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!newVote[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
     }
   }
 
