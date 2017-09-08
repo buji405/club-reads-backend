@@ -149,6 +149,34 @@ app.delete('/api/v1/vote/:id', (request, response) => {
     });
 });
 
+// Edit vote
+app.patch('/api/v1/vote/:id', (request, response) => {
+  const newVote = request.body;
+  
+  for (const requiredParamater of ['direction']) {
+    if (!newVote[requiredParamater]) {
+      return response.status(422).json({
+        error: `Missing required ${requiredParamater} parameter`,
+      });
+    }
+  }
+
+  database('vote')
+    .where('id', request.params.id)
+    .update(newVote, '*')
+    .then((vote) => {
+      if (vote.length) {
+        response.status(201).json({ vote });
+      } else {
+        response.status(404).json({
+          error: 'No vote data exists for that id'
+        });
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
 
 app.listen(port, () => {
   console.log(`App is listening on http://localhost:${port}`);
