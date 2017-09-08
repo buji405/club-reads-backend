@@ -95,12 +95,9 @@ app.post('/api/v1/book', (request, response) => {
 
 // Add a vote
 app.post('/api/v1/vote', (request, response) => {
-  // Lindsay
   const newVote = request.body;
 
-  for (const requiredParamater of ['user_id', 'book_id']) {
-  // I think we need a 'direction' column, right?
-  // for (const requiredParamater of ['user_id', 'book_id', 'direction']) {
+  for (const requiredParamater of ['direction', 'user_id', 'book_id']) {
     if (!newVote[requiredParamater]) {
       return response.status(422).json({
         error: `Missing required ${requiredParamater} parameter`
