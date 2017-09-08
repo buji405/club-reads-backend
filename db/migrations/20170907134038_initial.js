@@ -34,6 +34,7 @@ exports.up = (knex, Promise) => Promise.all([
 
   knex.schema.createTable('vote', (table) => {
     table.increments('id').primary();
+    table.string('direction');
     table.integer('user_id').unsigned();
     table.foreign('user_id').references('user.id');
     table.integer('book_id').unsigned();
