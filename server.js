@@ -131,8 +131,22 @@ app.post('/api/v1/vote', (request, response) => {
 });
 
 // Delete a vote
-app.delete('/api/v1/vote', (request, response) => {
-  // Travi
+app.delete('/api/v1/vote/:id', (request, response) => {
+  database('vote')
+    .where('id', request.params.id)
+    .del('*')
+    .then((vote) => {
+      if (vote.length) {
+        response.status(200).json({ vote });
+      } else {
+        response.status(404).json({
+          error: 'No vote data exists for that id'
+        });
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 
