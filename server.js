@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Get the clubs so a new user can select which club to join
 app.get('/api/v1/club', (request, response) => {
-  database('clubs').select()
+  database('club').select()
     .then((clubs) => {
       response.status(200).json(clubs);
     })
@@ -25,15 +25,40 @@ app.get('/api/v1/club', (request, response) => {
     });
 });
 
-// Sign up a new user
 // Login a user
-app.post('/api/v1/user', (request, response) => {
-  // Dave
+// Sign up a new user
+app.post('/api/v1/user/:action', (request, response) => {
+  const newUser = request.body;
+  const { email } = newUser;
+  const { action } = request.params;
+
+  if (action === 'login') {
+    database('user').where({ email }).select()
+      .then((user) => {
+        if (!user.length) {
+          throw new Error('User not found');
+        }
+        response.status(200).json({ user: user[0], message: 'login sucessful!' });
+      })
+      .catch((error) => {
+        response.status(404).json({ error: error.message });
+      });
+  } else if (action === 'signup') {
+    database('user').insert(newUser, '*')
+      .then((user) => {
+        response.status(201).json({ user, message: 'new user created!' });
+      })
+      .catch((error) => {
+        response.status(500).json({ error: error.detail });
+      });
+  } else {
+    response.status(500).json({ error: 'no endpoint found.' });
+  }
 });
 
 // View all club books
 app.get('/api/v1/book', (request, response) => {
-  database('books').select()
+  database('book').select()
     .then((books) => {
       response.status(200).json(books);
     })
