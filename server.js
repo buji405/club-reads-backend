@@ -44,7 +44,23 @@ app.get('/api/v1/book', (request, response) => {
 
 // Add a new club
 app.post('/api/v1/club', (request, response) => {
-  // Lindsay
+  const newClub = request.body;
+
+  for (const requiredParamater of ['name']) {
+    if (!newClub[requiredParamater]) {
+      return response.status(422).json({
+        error: `Missing required ${requiredParamater} parameter`,
+      });
+    }
+  }
+
+  database('club').insert(newClub, '*')
+    .then((club) => {
+      response.status(201).json(club[0]);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 // Add a new book to club books
