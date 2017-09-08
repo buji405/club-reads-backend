@@ -92,11 +92,22 @@ app.post('/api/v1/club', (request, response) => {
 app.post('/api/v1/book', (request, response) => {
   const newBook = request.body;
 
-  for (const requiredParamater of ['title', 'author', 'ISBN', 'description', 'image', 'upvotes', 'downvotes', 'status', 'user_id']) {
-    if (!newBook[requiredParamater]) {
-      return response.status(422).json({
-        error: `Missing required ${requiredParamater} parameter`,
-      });
+  const requiredParamaters = [
+    'title',
+    'author',
+    'ISBN',
+    'description',
+    'image',
+    'upvotes',
+    'downvotes',
+    'status',
+    'user_id',
+  ];
+
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!newBook[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
     }
   }
 
