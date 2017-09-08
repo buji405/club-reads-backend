@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Get the clubs so a new user can select which club to join
 app.get('/api/v1/club', (request, response) => {
-  database('clubs').select()
+  database('club').select()
     .then((clubs) => {
       response.status(200).json(clubs);
     })
@@ -33,7 +33,7 @@ app.post('/api/v1/user', (request, response) => {
 
 // View all club books
 app.get('/api/v1/book', (request, response) => {
-  database('books').select()
+  database('book').select()
     .then((books) => {
       response.status(200).json(books);
     })
