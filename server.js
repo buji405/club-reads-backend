@@ -90,7 +90,34 @@ app.post('/api/v1/club', (request, response) => {
 
 // Add a new book to club books
 app.post('/api/v1/book', (request, response) => {
-  // Travis
+  const newBook = request.body;
+
+  const requiredParamaters = [
+    'title',
+    'author',
+    'ISBN',
+    'description',
+    'image',
+    'upvotes',
+    'downvotes',
+    'status',
+    'user_id',
+  ];
+
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!newBook[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
+    }
+  }
+
+  database('book').insert(newBook, '*')
+    .then((book) => {
+      response.status(201).json(book[0]);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 // Add a vote
@@ -115,10 +142,53 @@ app.post('/api/v1/vote', (request, response) => {
 });
 
 // Delete a vote
-app.delete('/api/v1/vote', (request, response) => {
-  // Travi
+app.delete('/api/v1/vote/:id', (request, response) => {
+  database('vote')
+    .where('id', request.params.id)
+    .del('*')
+    .then((vote) => {
+      if (vote.length) {
+        response.status(200).json({ vote });
+      } else {
+        response.status(404).json({
+          error: 'No vote data exists for that id'
+        });
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
+// Edit vote
+app.patch('/api/v1/vote/:id', (request, response) => {
+  const newVote = request.body;
+  
+  const requiredParamaters = ['direction'];
+
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!newVote[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
+    }
+  }
+
+  database('vote')
+    .where('id', request.params.id)
+    .update(newVote, '*')
+    .then((vote) => {
+      if (vote.length) {
+        response.status(201).json({ vote });
+      } else {
+        response.status(404).json({
+          error: 'No vote data exists for that id'
+        });
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
 
 app.listen(port, () => {
   console.log(`App is listening on http://localhost:${port}`);
