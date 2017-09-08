@@ -25,8 +25,8 @@ app.get('/api/v1/club', (request, response) => {
     });
 });
 
-// Login a user
-// Sign up a new user
+// Login a user          /api/v1/user/login
+// Sign up a new user    /api/v1/user/signup
 app.post('/api/v1/user/:action', (request, response) => {
   const newUser = request.body;
   const { email } = newUser;
@@ -41,7 +41,7 @@ app.post('/api/v1/user/:action', (request, response) => {
         response.status(200).json({ user: user[0], message: 'login sucessful!' });
       })
       .catch((error) => {
-        response.status(404).json({ error: error.message });
+        response.status(422).json({ error: error.message });
       });
   } else if (action === 'signup') {
     database('user').insert(newUser, '*')
@@ -81,6 +81,7 @@ app.post('/api/v1/club', (request, response) => {
 
   database('club').insert(newClub, '*')
     .then((club) => {
+      console.log(club);
       response.status(201).json(club[0]);
     })
     .catch((error) => {
