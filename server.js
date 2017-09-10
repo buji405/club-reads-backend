@@ -163,7 +163,6 @@ app.delete('/api/v1/vote/:id', (request, response) => {
 // Edit vote
 app.patch('/api/v1/vote/:id', (request, response) => {
   const newVote = request.body;
-  
   const requiredParamaters = ['direction'];
 
   for (let i = 0; i < requiredParamaters.length; i += 1) {
@@ -181,7 +180,7 @@ app.patch('/api/v1/vote/:id', (request, response) => {
         response.status(201).json({ vote });
       } else {
         response.status(404).json({
-          error: 'No vote data exists for that id'
+          error: 'No vote data exists for that id',
         });
       }
     })
