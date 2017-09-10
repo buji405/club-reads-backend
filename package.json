@@ -20,7 +20,7 @@
     "mocha": "^3.5.0"
   },
   "scripts": {
-    "test": "",
+    "test": "NODE_ENV='test' ./node_modules/.bin/mocha",
     "start": "node server.js"
   },
   "repository": {
