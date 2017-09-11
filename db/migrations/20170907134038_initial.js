@@ -20,14 +20,15 @@ exports.up = (knex, Promise) => Promise.all([
     table.increments('id').primary();
     table.string('title');
     table.string('author');
-    table.string('ISBN').unique();
-    table.string('description');
+    table.string('goodreads_id').unique();
     table.string('image');
     table.integer('upvotes');
     table.integer('downvotes');
     table.string('status');
     table.integer('user_id').unsigned();
     table.foreign('user_id').references('user.id');
+    table.integer('club_id').unsigned();
+    table.foreign('club_id').references('club.id');
 
     table.timestamps(true, true);
   }),
