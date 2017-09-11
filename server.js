@@ -90,18 +90,19 @@ app.post('/api/v1/club', (request, response) => {
 
 // Add a new book to club books
 app.post('/api/v1/book', (request, response) => {
-  const newBook = request.body;
+  const newBook = Object.assign(request.body, {
+    upvotes: 0,
+    downvotes: 0,
+    status: 'suggested',
+  });
 
   const requiredParamaters = [
     'title',
     'author',
-    'ISBN',
-    'description',
+    'goodreads_id',
     'image',
-    'upvotes',
-    'downvotes',
-    'status',
     'user_id',
+    'club_id',
   ];
 
   for (let i = 0; i < requiredParamaters.length; i += 1) {
