@@ -42,6 +42,7 @@ exports.up = (knex, Promise) => Promise.all([
     table.foreign('user_id').references('user.id');
     table.integer('book_id').unsigned();
     table.foreign('book_id').references('book.id');
+    table.unique(['user_id', 'book_id']);
 
     table.timestamps(true, true);
   }),
