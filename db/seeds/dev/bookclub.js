@@ -44,6 +44,8 @@ const book = [
     status: 'reading',
     user_id: 1,
     club_id: 1,
+    avg_rating: 3.86,
+    ratings_count: 1000,
   },
   {
     id: 2,
@@ -56,6 +58,8 @@ const book = [
     status: 'reading',
     user_id: 2,
     club_id: 1,
+    avg_rating: 2.77,
+    ratings_count: 1000,
   },
   {
     id: 3,
@@ -68,6 +72,8 @@ const book = [
     status: 'reading',
     user_id: 4,
     club_id: 2,
+    avg_rating: 4.81,
+    ratings_count: 1000,
   },
 ];
 
