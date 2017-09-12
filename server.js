@@ -103,6 +103,8 @@ app.post('/api/v1/book', (request, response) => {
     'image',
     'user_id',
     'club_id',
+    'avg_rating',
+    'ratings_count',
   ];
 
   for (let i = 0; i < requiredParamaters.length; i += 1) {
