@@ -1,63 +1,107 @@
 const club = [
   {
     id: 1,
-    name: "Ladies in Books",
-  }
+    name: 'Club of Books',
+  },
+  {
+    id: 2,
+    name: 'Not Your Momma\'s Book Club',
+  },
 ];
 
 const user = [
   {
     id: 1,
-    email: "travis@email.com",
+    email: 'travis@email.com',
     club_id: 1,
   },
   {
     id: 2,
-    email: "lindsay@email.com",
+    email: 'lindsay@email.com',
     club_id: 1,
-  }
+  },
+  {
+    id: 3,
+    email: 'ciara@email.com',
+    club_id: 2,
+  },
+  {
+    id: 4,
+    email: 'dave@email.com',
+    club_id: 2,
+  },
 ];
 
 const book = [
   {
     id: 1,
-    title: "Fantasy Book",
-    author: "Weird Guy",
-    ISBN: "12345",
-    description: "It's an ok book",
-    image: "http://image.com",
-    upvotes: "5",
-    downvotes: "2",
-    status: "reading",
+    title: 'Fantasy Book',
+    author: 'George R.R. Martin',
+    goodreads_id: '12345',
+    image: 'http://image.com',
+    upvotes: '1',
+    downvotes: '1',
+    status: 'reading',
     user_id: 1,
+    club_id: 1,
   },
   {
     id: 2,
-    title: "Historic Book",
-    author: "Smart Gal",
-    ISBN: "67890",
-    description: "It's an informative book",
-    image: "http://image.com",
-    upvotes: "3",
-    downvotes: "2",
-    status: "completed",
+    title: 'Muder/Mystery Book',
+    author: 'Stieg Larsson',
+    goodreads_id: '45678',
+    image: 'http://image.com',
+    upvotes: '0',
+    downvotes: '1',
+    status: 'reading',
     user_id: 2,
-  }
+    club_id: 1,
+  },
+  {
+    id: 3,
+    title: 'Horror Book',
+    author: 'Stephen King',
+    goodreads_id: '67890',
+    image: 'http://image.com',
+    upvotes: '2',
+    downvotes: '0',
+    status: 'reading',
+    user_id: 4,
+    club_id: 2,
+  },
 ];
 
 const vote = [
   {
     id: 1,
-    direction: "up",
-    user_id: 1,
-    book_id:1,
+    direction: 'down',
+    user_id: 2,
+    book_id: 1,
   },
   {
     id: 2,
-    direction: "down",
-    user_id: 2,
+    direction: 'up',
+    user_id: 1,
+    book_id: 1,
+  },
+  {
+    id: 3,
+    direction: 'down',
+    user_id: 1,
     book_id: 2,
-  }
+  },
+  {
+    id: 4,
+    direction: 'up',
+    user_id: 3,
+    book_id: 3,
+  },
+  {
+    id: 5,
+    direction: 'up',
+    user_id: 4,
+    book_id: 3,
+  },
 ];
 
 exports.seed = (knex, Promise) => {
