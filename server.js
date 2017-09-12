@@ -56,9 +56,9 @@ app.post('/api/v1/user/:action', (request, response) => {
   }
 });
 
-// View all club books
+// View all club books (or with query parameter)
 app.get('/api/v1/book', (request, response) => {
-  database('book').select()
+  database('book').where('club_id', request.query.club_id).select()
     .then((books) => {
       response.status(200).json(books);
     })
