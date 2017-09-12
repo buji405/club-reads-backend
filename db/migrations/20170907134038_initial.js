@@ -21,6 +21,8 @@ exports.up = (knex, Promise) => Promise.all([
     table.string('title');
     table.string('author');
     table.string('goodreads_id').unique();
+    table.string('avg_rating');
+    table.string('ratings_count');
     table.string('image');
     table.integer('upvotes');
     table.integer('downvotes');
