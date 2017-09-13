@@ -67,6 +67,16 @@ app.get('/api/v1/book', (request, response) => {
     });
 });
 
+// Update vote counts on a book
+app.patch('/api/v1/book', (request, response) => {
+  const { direction, book_id } = request.body;
+
+  database('book').where('id', book_id).select().increment(`${direction}votes`, '*')
+    .then(book => {
+      console.log(book)
+    });
+});
+
 // Add a new club
 app.post('/api/v1/club', (request, response) => {
   const newClub = request.body;
