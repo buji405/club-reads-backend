@@ -71,9 +71,27 @@ app.get('/api/v1/book', (request, response) => {
 app.patch('/api/v1/book', (request, response) => {
   const { direction, book_id } = request.body;
 
+  const requiredParamaters = [
+    'direction',
+    'book_id',
+  ];
+
+  for (let i = 0; i < requiredParamaters.length; i += 1) {
+    const param = requiredParamaters[i];
+    if (!request.body[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
+    }
+  }
+
   database('book').where('id', book_id).select().increment(`${direction}votes`, '*')
-    .then(book => {
-      console.log(book)
+    .then((quantity) => {
+      if (quantity === 0) {
+        throw new Error('Update failed, check direction and book_id');
+      }
+      response.status(204).end();
+    })
+    .catch((error) => {
+      response.status(500).json({ error: error.message });
     });
 });
 
