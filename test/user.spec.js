@@ -8,7 +8,7 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('API book routes', () => {
+describe('API user routes', () => {
   before((done) => {
     db.migrate.latest()
       .then(() => done())
@@ -40,7 +40,6 @@ describe('API book routes', () => {
           res.body.user.club_id.should.equal(2);
           res.body.user.should.have.property('updated_at');
           res.body.user.should.have.property('created_at');
-
           done();
         });
     });
@@ -56,9 +55,8 @@ describe('API book routes', () => {
           res.should.have.status(422);
           res.body.should.have.property('error');
           res.body.error.should.equal('User not found');
-
           done();
-        })
+        });
     });
     it('should throw a 404 status error if endpoint is wrong', (done) => {
       chai.request(server)
@@ -73,22 +71,68 @@ describe('API book routes', () => {
           done();
         });
     });
+    it('should throw an error if missing parameter', (done) => {
+      chai.request(server)
+        .post('/api/v1/user/login')
+        .send({
+          id: 6,
+        })
+        .end((err, res) => {
+          res.should.have.status(422);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('Missing required email parameter');
+          done();
+        });
+    });
   });
 
   describe('POST /api/v1/user/signup', () => {
-    it.only('should add a new user trying to sign up', (done) => {
+    it('should add a new user trying to sign up', (done) => {
       chai.request(server)
         .post('/api/v1/user/signup')
         .send({
           id: 5,
           email: 'polly.pocket@gmail.com',
           club_id: 1,
-          action: 'signup',
         })
         .end((err, res) => {
-          console.log(res.error);
           res.should.have.status(201);
-
+          res.body.user.should.have.property('email');
+          res.body.user.email.should.equal('polly.pocket@gmail.com');
+          res.body.user.should.have.property('club_id');
+          res.body.user.club_id.should.equal(1);
+          res.body.message.should.equal('new user created!');
           done();
         });
     });
+    it('should throw an error if missing parameter', (done) => {
+      chai.request(server)
+        .post('/api/v1/user/signup')
+        .send({
+          id: 6,
+          email: 'mikeJones@email.com',
+        })
+        .end((err, res) => {
+          res.body.should.be.a('object');
+          res.should.have.status(422);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('Missing required club_id parameter');
+          done();
+        });
+    });
+    it('should throw a 404 status error if endpoint is wrong', (done) => {
+      chai.request(server)
+        .post('/api/v1/singup')
+        .send({
+          id: 6,
+          email: 'selena@gmail.com',
+          club_id: 2,
+        })
+        .end((err, res) => {
+          res.body.should.be.a('object');
+          res.status.should.equal(404);
+          done();
+        });
+    });
+  });
+});
