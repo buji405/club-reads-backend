@@ -1,19 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const path = require('path');
+
 const app = express();
 const port = (process.env.PORT || 4000);
 
-const environment = process.env.NODE_ENV || 'development'
-const configuration = require('./knexfile')[environment]
-const database = require('knex')(configuration)
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, 'public')));
 
 // ENDPOINTS
-
 // Get the clubs so a new user can select which club to join
 app.get('/api/v1/club', (request, response) => {
   database('club').select()
@@ -48,6 +46,17 @@ app.post('/api/v1/user/:action', (request, response) => {
   const { email } = newUser;
   const { action } = request.params;
 
+  const requiredLoginParamaters = [
+    'email',
+  ];
+
+  for (let i = 0; i < requiredLoginParamaters.length; i += 1) {
+    const param = requiredLoginParamaters[i];
+    if (!newUser[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
+    }
+  }
+
   if (action === 'login') {
     database('user').where({ email }).select()
       .then((user) => {
@@ -60,6 +69,18 @@ app.post('/api/v1/user/:action', (request, response) => {
         response.status(422).json({ error: error.message });
       });
   } else if (action === 'signup') {
+    const requiredSignupParamaters = [
+      'email',
+      'club_id',
+    ];
+
+    for (let i = 0; i < requiredSignupParamaters.length; i += 1) {
+      const param = requiredSignupParamaters[i];
+      if (!newUser[param]) {
+        return response.status(422).json({ error: `Missing required ${param} parameter` });
+      }
+    }
+
     database('user').insert(newUser, '*')
       .then((user) => {
         response.status(201).json({ user: user[0], message: 'new user created!' });
@@ -86,7 +107,7 @@ app.get('/api/v1/book', (request, response) => {
 // Update book information
 app.patch('/api/v1/book', (request, response) => {
   const { id, status } = request.query;
-  const { direction, newStatus } = request.body;
+  const { direction, newStatus, newUpdatedAt } = request.body;
   const dbValue = !id ? 'status' : 'id';
   const reqValue = !id ? status : id;
 
@@ -106,7 +127,10 @@ app.patch('/api/v1/book', (request, response) => {
   } else {
     database('book')
       .where(dbValue, reqValue)
-      .update({ status: newStatus }, '*')
+      .update({
+        status: newStatus,
+        updated_at: newUpdatedAt,
+      }, '*')
       .then((result) => {
         if (result === 0) {
           throw new Error('Update failed, check request body');
