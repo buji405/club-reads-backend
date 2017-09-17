@@ -1,26 +1,32 @@
 const club = [
   {
+    id: 1,
     name: 'Club of Books',
   },
   {
+    id: 2,
     name: 'Not Your Momma\'s Book Club',
   },
 ];
 
 const user = [
   {
+    id: 1,
     email: 'travis@email.com',
     club_id: 1,
   },
   {
+    id: 2,
     email: 'lindsay@email.com',
     club_id: 1,
   },
   {
+    id: 3,
     email: 'ciara@email.com',
     club_id: 2,
   },
   {
+    id: 4,
     email: 'dave@email.com',
     club_id: 2,
   },
@@ -28,6 +34,7 @@ const user = [
 
 const book = [
   {
+    id: 1,
     title: 'Fantasy Book',
     author: 'George R.R. Martin',
     goodreads_id: '12345',
@@ -41,6 +48,7 @@ const book = [
     ratings_count: 1000,
   },
   {
+    id: 2,
     title: 'Muder/Mystery Book',
     author: 'Stieg Larsson',
     goodreads_id: '45678',
@@ -54,6 +62,7 @@ const book = [
     ratings_count: 1000,
   },
   {
+    id: 3,
     title: 'Horror Book',
     author: 'Stephen King',
     goodreads_id: '67890',
@@ -70,26 +79,31 @@ const book = [
 
 const vote = [
   {
+    id: 1,
     direction: 'down',
     user_id: 2,
     book_id: 1,
   },
   {
+    id: 2,
     direction: 'up',
     user_id: 1,
     book_id: 1,
   },
   {
+    id: 3,
     direction: 'down',
     user_id: 1,
     book_id: 2,
   },
   {
+    id: 4,
     direction: 'up',
     user_id: 3,
     book_id: 3,
   },
   {
+    id: 5,
     direction: 'up',
     user_id: 4,
     book_id: 3,
@@ -120,6 +134,9 @@ exports.seed = (knex, Promise) => {
       return Promise.all(vote.map((vote) => {
         return knex('vote').insert(vote);
       }));
+    })
+    .then(() => {
+      console.log('Re-seeding Complete');
     })
     .catch(() => {
       console.log({ error: 'Error seeding data' });
