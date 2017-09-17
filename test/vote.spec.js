@@ -89,4 +89,23 @@ describe('API vote routes', () => {
         });
     });
   });
+
+  describe('PATCH /api/v1/vote/:id', () => {
+    it('user should be able to edit a vote', (done) => {
+      chai.request(server)
+        .patch('/api/v1/vote/2')
+        .send({
+          direction: 'down',
+        })
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          res.body.vote[0].should.have.property('id');
+          res.body.vote[0].id.should.equal(2);
+          res.body.vote[0].should.have.property('direction');
+          res.body.vote[0].direction.should.equal('down');
+          done();
+        });
+    });
+  });
 });
