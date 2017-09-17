@@ -83,32 +83,40 @@ app.get('/api/v1/book', (request, response) => {
     });
 });
 
-// Update vote counts on a book
+// Update book information
 app.patch('/api/v1/book', (request, response) => {
-  const { direction, book_id } = request.body;
+  const { id, status } = request.query;
+  const { direction, newStatus } = request.body;
+  const dbValue = !id ? 'status' : 'id';
+  const reqValue = !id ? status : id;
 
-  const requiredParamaters = [
-    'direction',
-    'book_id',
-  ];
-
-  for (let i = 0; i < requiredParamaters.length; i += 1) {
-    const param = requiredParamaters[i];
-    if (!request.body[param]) {
-      return response.status(422).json({ error: `Missing required ${param} parameter` });
-    }
+  if (direction) {
+    database('book').where('id', id)
+      .select()
+      .increment(`${direction}votes`, '*')
+      .then((quantity) => {
+        if (quantity === 0) {
+          throw new Error('Update failed, check request body');
+        }
+        response.status(204).end();
+      })
+      .catch((error) => {
+        response.status(500).json({ error: error.message });
+      });
+  } else {
+    database('book')
+      .where(dbValue, reqValue)
+      .update({ status: newStatus }, '*')
+      .then((result) => {
+        if (result === 0) {
+          throw new Error('Update failed, check request body');
+        }
+        response.status(204).end();
+      })
+      .catch((error) => {
+        response.status(500).json({ error: error.message });
+      });
   }
-
-  database('book').where('id', book_id).select().increment(`${direction}votes`, '*')
-    .then((quantity) => {
-      if (quantity === 0) {
-        throw new Error('Update failed, check direction and book_id');
-      }
-      response.status(204).end();
-    })
-    .catch((error) => {
-      response.status(500).json({ error: error.message });
-    });
 });
 
 // Add a new club
