@@ -54,7 +54,7 @@ describe('API book routes', () => {
           res.body[0].image.should.equal('https://images.gr-assets.com/books/1436732693l/13496.jpg');
           res.body[0].upvotes.should.equal(1);
           res.body[0].downvotes.should.equal(1);
-          res.body[0].status.should.equal('reading');
+          res.body[0].status.should.equal('suggested');
           res.body[0].user_id.should.equal(1);
           res.body[0].club_id.should.equal(1);
           done();
@@ -155,24 +155,56 @@ describe('API book routes', () => {
   describe('PATCH /api/v1/book', () => {
     it('should increment the up votes column', (done) => {
       chai.request(server)
-        .patch('/api/v1/book')
+        .patch('/api/v1/book?id=1')
         .send({
           direction: 'up',
-          book_id: 1,
         })
         .end((err, res) => {
           res.should.have.status(204);
           res.body.should.deep.equal({});
+          done();
+        });
+    });
+    it('should have a server error if update fails', (done) => {
+      chai.request(server)
+        .patch('/api/v1/book?id=1')
+        .send({
+          direction: '',
+        })
+        .end((err, res) => {
+          res.status.should.equal(500);
+          done();
+        });
+    });
+    it('should change the books status', (done) => {
+      chai.request(server)
+        .patch('/api/v1/book?id=1')
+        .send({
+          newStatus: 'suggested',
+        })
+        .end((err, res) => {
+          res.should.have.status(204);
+          res.body.should.deep.equal({});
+          done();
+        });
+    });
+    it('should have a server error if update fails', (done) => {
+      chai.request(server)
+        .patch('/api/v1/book?id=1')
+        .send({
+          status: '',
+        })
+        .end((err, res) => {
+          res.status.should.equal(500);
           done();
         });
     });
 
     it('should increment the down votes column', (done) => {
       chai.request(server)
-        .patch('/api/v1/book')
+        .patch('/api/v1/book?id=1')
         .send({
           direction: 'down',
-          book_id: 1,
         })
         .end((err, res) => {
           res.should.have.status(204);
@@ -181,33 +213,17 @@ describe('API book routes', () => {
         });
     });
 
-    it('should return an error if missing parameters', (done) => {
-      chai.request(server)
-        .patch('/api/v1/book')
-        .send({
-          direction: 'up',
-        })
-        .end((err, res) => {
-          res.should.have.status(422);
-          res.body.should.be.a('object');
-          res.body.should.have.property('error');
-          res.body.error.should.equal('Missing required book_id parameter');
-          done();
-        });
-    });
-
     it('should return an error if foreign key is not found', (done) => {
       chai.request(server)
-        .patch('/api/v1/book')
+        .patch('/api/v1/book?id=1000')
         .send({
           direction: 'down',
-          book_id: 1000,
         })
         .end((err, res) => {
           res.should.have.status(500);
           res.body.should.be.a('object');
           res.body.should.have.property('error');
-          res.body.error.should.equal('Update failed, check direction and book_id');
+          res.body.error.should.equal('Update failed, check request body');
           done();
         });
     });
