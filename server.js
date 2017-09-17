@@ -25,6 +25,22 @@ app.get('/api/v1/club', (request, response) => {
     });
 });
 
+// Get data for a specific club
+app.get('/api/v1/club/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('club').where({ id }).select()
+    .then((clubs) => {
+      if (!clubs.length) {
+        return response.status(404).json({ error: `A book club with the id ${id} was not found.` });
+      }
+      return response.status(200).json(clubs);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
 // Login a user          /api/v1/user/login
 // Sign up a new user    /api/v1/user/signup
 app.post('/api/v1/user/:action', (request, response) => {

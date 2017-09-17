@@ -1,9 +1,12 @@
+/* eslint-disable padded-blocks */
+
 const chai = require('chai');
-const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server.js');
 const configuration = require('../knexfile')[process.env.NODE_ENV];
 const db = require('knex')(configuration);
+
+const should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -21,6 +24,7 @@ describe('API club routes', () => {
   });
 
   describe('GET /api/v1/club', () => {
+
     it('should get all of the clubs in the database', (done) => {
       chai.request(server)
         .get('/api/v1/club')
@@ -32,10 +36,35 @@ describe('API club routes', () => {
             club.should.have.property('id');
             club.should.have.property('name');
           });
-          res.body[0].name.should.equal('Ladies in Books')
           done();
         });
     });
+
+    it('should get a single club from the database', (done) => {
+      chai.request(server)
+        .get('/api/v1/club/1')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('array');
+          res.body.should.have.length(1);
+          res.body[0].name.should.eql('Club of Books');
+          done();
+        });
+    });
+
+    it('should return an error if no club is found', (done) => {
+      const clubId = 3;
+
+      chai.request(server)
+        .get(`/api/v1/club/${clubId}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error');
+          res.body.error.should.eql(`A book club with the id ${clubId} was not found.`);
+          done();
+        });
+    });
+
   });
 
   describe('POST /api/v1/club', () => {
