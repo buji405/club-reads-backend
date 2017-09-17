@@ -46,6 +46,17 @@ app.post('/api/v1/user/:action', (request, response) => {
   const { email } = newUser;
   const { action } = request.params;
 
+  const requiredLoginParamaters = [
+    'email',
+  ];
+
+  for (let i = 0; i < requiredLoginParamaters.length; i += 1) {
+    const param = requiredLoginParamaters[i];
+    if (!newUser[param]) {
+      return response.status(422).json({ error: `Missing required ${param} parameter` });
+    }
+  }
+
   if (action === 'login') {
     database('user').where({ email }).select()
       .then((user) => {
@@ -58,6 +69,18 @@ app.post('/api/v1/user/:action', (request, response) => {
         response.status(422).json({ error: error.message });
       });
   } else if (action === 'signup') {
+    const requiredSignupParamaters = [
+      'email',
+      'club_id',
+    ];
+
+    for (let i = 0; i < requiredSignupParamaters.length; i += 1) {
+      const param = requiredSignupParamaters[i];
+      if (!newUser[param]) {
+        return response.status(422).json({ error: `Missing required ${param} parameter` });
+      }
+    }
+
     database('user').insert(newUser, '*')
       .then((user) => {
         response.status(201).json({ user: user[0], message: 'new user created!' });

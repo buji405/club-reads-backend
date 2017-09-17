@@ -19,7 +19,7 @@ describe('API vote routes', () => {
       .then(() => done())
       .catch(error => console.log(error));
   });
-  
+
   describe('POST /api/v1/vote', () => {
     it('should create a new user vote', (done) => {
       chai.request(server)

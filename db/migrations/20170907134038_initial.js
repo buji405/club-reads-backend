@@ -26,7 +26,7 @@ exports.up = (knex, Promise) => Promise.all([
     table.string('image');
     table.integer('upvotes');
     table.integer('downvotes');
-    table.string('status');
+    table.string('status');``
     table.integer('user_id').unsigned();
     table.foreign('user_id').references('user.id');
     table.integer('club_id').unsigned();
