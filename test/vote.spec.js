@@ -64,5 +64,14 @@ describe('API vote routes', () => {
           done();
         });
     });
+    it('should return an error if vote does not exist', () => {
+      chai.request(server)
+        .delete('/api/v1/vote/11')
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('No vote data exists for that id');
+        })
+    })
   });
 });
