@@ -44,13 +44,27 @@ describe('API vote routes', () => {
           done();
         });
     });
+    it('should return an error if required info Missing', (done) => {
+      chai.request(server)
+        .post('/api/v1/vote')
+        .send({
+          id: 6,
+          user_id: 4,
+          book_id: 1,
+        })
+        .end((err, res) => {
+          res.should.have.status(422);
+          res.body.error.should.equal('Missing required direction parameter');
+          done();
+        });
+    });
   });
+
   describe('DELETE /api/v1/vote/3', () => {
     it('should delete a vote', (done) => {
       chai.request(server)
         .delete('/api/v1/vote/3')
         .end((err, res) => {
-          console.log(res.body.vote);
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.vote[0].should.have.property('id');
@@ -64,14 +78,15 @@ describe('API vote routes', () => {
           done();
         });
     });
-    it('should return an error if vote does not exist', () => {
+    it('should return an error if vote does not exist', (done) => {
       chai.request(server)
         .delete('/api/v1/vote/11')
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have.property('error');
           res.body.error.should.equal('No vote data exists for that id');
-        })
-    })
+          done();
+        });
+    });
   });
 });
