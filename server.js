@@ -1,19 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const path = require('path');
+
 const app = express();
 const port = (process.env.PORT || 4000);
 
-const environment = process.env.NODE_ENV || 'development'
-const configuration = require('./knexfile')[environment]
-const database = require('knex')(configuration)
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, 'public')));
 
 // ENDPOINTS
-
 // Get the clubs so a new user can select which club to join
 app.get('/api/v1/club', (request, response) => {
   database('club').select()
@@ -86,7 +84,7 @@ app.get('/api/v1/book', (request, response) => {
 // Update book information
 app.patch('/api/v1/book', (request, response) => {
   const { id, status } = request.query;
-  const { direction, newStatus } = request.body;
+  const { direction, newStatus, newUpdatedAt } = request.body;
   const dbValue = !id ? 'status' : 'id';
   const reqValue = !id ? status : id;
 
@@ -106,7 +104,10 @@ app.patch('/api/v1/book', (request, response) => {
   } else {
     database('book')
       .where(dbValue, reqValue)
-      .update({ status: newStatus }, '*')
+      .update({
+        status: newStatus,
+        updated_at: newUpdatedAt,
+      }, '*')
       .then((result) => {
         if (result === 0) {
           throw new Error('Update failed, check request body');
