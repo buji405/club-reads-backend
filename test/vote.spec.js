@@ -107,5 +107,18 @@ describe('API vote routes', () => {
           done();
         });
     });
+    it('should throw an error if invalid paramaters are given', (done) => {
+      chai.request(server)
+        .patch('/api/v1/vote/18')
+        .send({
+          direction: 'up',
+        })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('No vote data exists for that id');
+          done();
+        });
+    });
   });
 });
