@@ -11,32 +11,20 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe('API club routes', () => {
-  // before((done) => {
-  //   db.migrate.latest()
-  //     .then(() => done())
-  //     .catch(error => console.log(error));
-  // });
-  //
-  // beforeEach((done) => {
-  //   db.seed.run()
-  //     .then(() => done())
-  //     .catch(error => console.log(error));
-  // });
+  before((done) => {
+    db.migrate.latest()
+      .then(() => done())
+      .catch(error => console.log(error));
+  });
 
   beforeEach((done) => {
-    db.migrate.rollback()
-      .then(() => {
-        db.migrate.latest()
-          .then(() => {
-            db.seed.run()
-              .then(() => {
-                done();
-              });
-          });
-      });
+    db.seed.run()
+      .then(() => done())
+      .catch(error => console.log(error));
   });
 
   describe('GET /api/v1/club', () => {
+
     it('should get all of the clubs in the database', (done) => {
       chai.request(server)
         .get('/api/v1/club')
@@ -51,9 +39,10 @@ describe('API club routes', () => {
           done();
         });
     });
+
     it('should get a single club from the database', (done) => {
       chai.request(server)
-        .get('/api/v1/club/2')
+        .get('/api/v1/club/1')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');
@@ -62,6 +51,7 @@ describe('API club routes', () => {
           done();
         });
     });
+
     it('should return an error if no club is found', (done) => {
       const clubId = 3;
 
@@ -74,6 +64,7 @@ describe('API club routes', () => {
           done();
         });
     });
+
   });
 
   describe('POST /api/v1/club', () => {
