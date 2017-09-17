@@ -87,8 +87,10 @@ app.get('/api/v1/book', (request, response) => {
 app.patch('/api/v1/book', (request, response) => {
   const { id, status } = request.query;
   const { direction, newStatus } = request.body;
+  const dbValue = !id ? 'status' : 'id';
+  const reqValue = !id ? status : id;
 
-  if (id) {
+  if (direction) {
     database('book').where('id', id)
       .select()
       .increment(`${direction}votes`, '*')
@@ -101,9 +103,9 @@ app.patch('/api/v1/book', (request, response) => {
       .catch((error) => {
         response.status(500).json({ error: error.message });
       });
-  } else if (status) {
+  } else {
     database('book')
-      .where('status', status)
+      .where(dbValue, reqValue)
       .update({ status: newStatus }, '*')
       .then((result) => {
         if (result === 0) {
