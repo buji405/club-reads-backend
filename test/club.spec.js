@@ -73,6 +73,7 @@ describe('API club routes', () => {
       chai.request(server)
         .post('/api/v1/club')
         .send({
+          id: 3,
           name: 'best book club ever!',
         })
         .end((err, res) => {
@@ -94,7 +95,6 @@ describe('API club routes', () => {
         .end((err, res) => {
           res.should.have.status(422);
           res.body.error.should.equal('Missing required name parameter');
-
           done();
         });
     });
