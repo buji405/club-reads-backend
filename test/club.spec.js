@@ -94,7 +94,6 @@ describe('API club routes', () => {
         .end((err, res) => {
           res.should.have.status(422);
           res.body.error.should.equal('Missing required name parameter');
-
           done();
         });
     });
