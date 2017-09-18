@@ -73,6 +73,7 @@ describe('API club routes', () => {
       chai.request(server)
         .post('/api/v1/club')
         .send({
+          id: 3,
           name: 'best book club ever!',
         })
         .end((err, res) => {
