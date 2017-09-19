@@ -1,9 +1,9 @@
 const club = [
   {
-    name: 'Club of Books',
+    name: 'Turing',
   },
   {
-    name: 'Not Your Momma\'s Book Club',
+    name: '1703 FrontEnd',
   },
 ];
 
