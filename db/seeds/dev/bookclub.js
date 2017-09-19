@@ -1,32 +1,26 @@
 const club = [
   {
-    id: 1,
     name: 'Club of Books',
   },
   {
-    id: 2,
     name: 'Not Your Momma\'s Book Club',
   },
 ];
 
 const user = [
   {
-    id: 1,
     email: 'travis@email.com',
     club_id: 1,
   },
   {
-    id: 2,
     email: 'lindsay@email.com',
     club_id: 1,
   },
   {
-    id: 3,
     email: 'ciara@email.com',
     club_id: 2,
   },
   {
-    id: 4,
     email: 'dave@email.com',
     club_id: 2,
   },
@@ -34,21 +28,19 @@ const user = [
 
 const book = [
   {
-    id: 1,
     title: 'Fantasy Book',
     author: 'George R.R. Martin',
     goodreads_id: '12345',
     image: 'https://images.gr-assets.com/books/1436732693l/13496.jpg',
     upvotes: '1',
     downvotes: '1',
-    status: 'reading',
+    status: 'read',
     user_id: 1,
     club_id: 1,
     avg_rating: 3.86,
     ratings_count: 1000,
   },
   {
-    id: 2,
     title: 'Muder/Mystery Book',
     author: 'Stieg Larsson',
     goodreads_id: '45678',
@@ -62,16 +54,15 @@ const book = [
     ratings_count: 1000,
   },
   {
-    id: 3,
     title: 'Horror Book',
     author: 'Stephen King',
     goodreads_id: '67890',
     image: 'https://images.gr-assets.com/books/1334416842l/830502.jpg',
     upvotes: '2',
     downvotes: '0',
-    status: 'reading',
+    status: 'suggested',
     user_id: 4,
-    club_id: 2,
+    club_id: 1,
     avg_rating: 4.81,
     ratings_count: 1000,
   },
@@ -79,31 +70,26 @@ const book = [
 
 const vote = [
   {
-    id: 1,
     direction: 'down',
     user_id: 2,
     book_id: 1,
   },
   {
-    id: 2,
     direction: 'up',
     user_id: 1,
     book_id: 1,
   },
   {
-    id: 3,
     direction: 'down',
     user_id: 1,
     book_id: 2,
   },
   {
-    id: 4,
     direction: 'up',
     user_id: 3,
     book_id: 3,
   },
   {
-    id: 5,
     direction: 'up',
     user_id: 4,
     book_id: 3,
