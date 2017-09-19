@@ -20,6 +20,35 @@ describe('API vote routes', () => {
       .catch(error => console.log(error));
   });
 
+  describe('GET /api/v1/vote', () => {
+    it('should get a vote for a specific user and book', (done) => {
+      chai.request(server)
+        .get('/api/v1/vote?bookId=1&userId=1')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body[0].should.have.property('id');
+          res.body[0].id.should.equal(2);
+          res.body[0].should.have.property('direction');
+          res.body[0].direction.should.equal('up');
+          res.body[0].should.have.property('user_id');
+          res.body[0].user_id.should.equal(1);
+          res.body[0].should.have.property('book_id');
+          res.body[0].book_id.should.equal(1);
+          done();
+        });
+    });
+    it('should return an error if no vote is found for the specified book & user', (done) => {
+      chai.request(server)
+        .get('/api/v1/vote?bookId=20&userId=1')
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('no vote data found for user: 1 on book: 20');
+          done();
+        });
+    });
+  });
+
   describe('POST /api/v1/vote', () => {
     it('should create a new user vote', (done) => {
       chai.request(server)
@@ -122,4 +151,3 @@ describe('API vote routes', () => {
     });
   });
 });
-
