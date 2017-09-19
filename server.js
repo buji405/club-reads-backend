@@ -278,6 +278,26 @@ app.patch('/api/v1/vote/:id', (request, response) => {
     });
 });
 
+app.get('/api/v1/vote/', (request, response) => {
+  const { userId, bookId } = request.query;
+  database('vote')
+    .where({
+      user_id: userId,
+      book_id: bookId,
+    })
+    .select()
+    .then((vote) => {
+      if (vote.length) {
+        response.status(200).json(vote);
+      } else {
+        response.status(404).json({ error: `no vote data found for user: ${userId} on book: ${bookId}` });
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
 app.listen(port, () => {
   console.log(`App is listening on http://localhost:${port}`);
 });
