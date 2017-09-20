@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -16,7 +18,7 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.all('/*', function(req, res, next) {
+app.all('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   next();
 });
@@ -240,7 +242,7 @@ app.delete('/api/v1/vote/:id', (request, response) => {
         response.status(200).json({ vote });
       } else {
         response.status(404).json({
-          error: 'No vote data exists for that id'
+          error: 'No vote data exists for that id',
         });
       }
     })

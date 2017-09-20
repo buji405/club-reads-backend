@@ -1,3 +1,6 @@
+/* eslint-disable arrow-body-style */
+/* eslint-disable no-shadow */
+
 const club = [
   {
     name: 'Club of Books',
